@@ -17,6 +17,7 @@ def print_help():
     print 'Advanced options:'
     print '  --demote\t\t\tdemote device to enable JTAG'
     print '  --boot\t\t\tboot device'
+    print '  --boot122\t\t\tboot device with iOS 12.2'
     print '  --dump=address,length\t\tdump memory to stdout'
     print '  --hexdump=address,length\thexdump memory to stdout'
     print '  --dump-rom\t\t\tdump SecureROM'
@@ -372,7 +373,7 @@ if __name__ == '__main__':
                 print 'Encrypting with device-specific UID key.'
                 print device.aes_hex(arg, AES_ENCRYPT, AES_UID_KEY)
 
-        if opt == '--boot':
+        if opt.startswith('--boot'):
             device = dfu.acquire_device()
             serial_number = device.serial_number
             dfu.release_device(device)
@@ -407,7 +408,11 @@ if __name__ == '__main__':
                 print 'Heap repaired.'
 
                 device.write_memory(TRAMPOLINE, checkm8.asm_arm64_branch(TRAMPOLINE, TRAMPOLINE + 0x400))
-                device.write_memory(TRAMPOLINE + 0x400, open('bin/t8015_shellcode_arm64.bin').read())
+
+                if opt.endswith('122'):
+                    device.write_memory(TRAMPOLINE + 0x400, open('bin/t8015_shellcode_arm64_1220.bin').read())
+                else:
+                    device.write_memory(TRAMPOLINE + 0x400, open('bin/t8015_shellcode_arm64.bin').read())
 
                 device.write_memory_ptr(BOOTSTRAP_TASK_LR, NAND_BOOT_JUMP)
                 device.write_memory(DFU_BOOL, '\x01')
