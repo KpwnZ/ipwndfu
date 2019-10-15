@@ -18,6 +18,7 @@ def print_help():
     print '  --demote\t\t\tdemote device to enable JTAG'
     print '  --boot\t\t\tboot device'
     print '  --boot122\t\t\tboot device with iOS 12.2'
+    print '  --boot124\t\t\tboot device with iOS 12.4'
     print '  --dump=address,length\t\tdump memory to stdout'
     print '  --hexdump=address,length\thexdump memory to stdout'
     print '  --dump-rom\t\t\tdump SecureROM'
@@ -33,7 +34,7 @@ def print_help():
 
 if __name__ == '__main__':
     try:
-        advanced = ['demote', 'boot', 'boot122', 'dump=', 'hexdump=', 'dump-rom', 'dump-nor=', 'flash-nor=', '24kpwn', 'remove-24kpwn', 'remove-alloc8', 'decrypt-gid=', 'encrypt-gid=', 'decrypt-uid=', 'encrypt-uid=']
+        advanced = ['demote', 'boot', 'boot122', 'boot124', 'dump=', 'hexdump=', 'dump-rom', 'dump-nor=', 'flash-nor=', '24kpwn', 'remove-24kpwn', 'remove-alloc8', 'decrypt-gid=', 'encrypt-gid=', 'decrypt-uid=', 'encrypt-uid=']
         opts, args = getopt.getopt(sys.argv[1:], 'pxf:', advanced)
     except getopt.GetoptError:
         print 'ERROR: Invalid arguments provided.'
@@ -411,6 +412,8 @@ if __name__ == '__main__':
 
                 if opt.endswith('122'):
                     device.write_memory(TRAMPOLINE + 0x400, open('bin/t8015_shellcode_arm64_1220.bin').read())
+                elif opt.endswith('124'):
+                    device.write_memory(TRAMPOLINE + 0x400, open('bin/t8015_shellcode_arm64_1240.bin').read())
                 else:
                     device.write_memory(TRAMPOLINE + 0x400, open('bin/t8015_shellcode_arm64.bin').read())
 
