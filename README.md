@@ -4,6 +4,9 @@
 
 **Read [disclaimer](#disclaimer) before using this software.*
 
+## This fork added support for verbose booting more devices using checkm8
+
+* current support: t8015 iOS 12.2/12.4/13
 
 ## checkm8
 
